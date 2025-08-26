@@ -1,0 +1,776 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Meu Humor & Diário</title>
+  <meta name="description" content="App simples de humor e diário estilo Daylio, 100% local (salvo no seu navegador)." />
+  <style>
+    :root{
+      --bg:#0b0f14; /* dark default */
+      --panel:#131a22;
+      --muted:#6b7280;
+      --text:#e5e7eb;
+      --primary:#60a5fa;
+      --accent:#34d399;
+      --warn:#f59e0b;
+      --danger:#ef4444;
+      --ok:#22c55e;
+      --radius:16px;
+      --shadow:0 10px 30px rgba(0,0,0,.35);
+    }
+    [data-theme="light"]{
+      --bg:#f5f7fb;
+      --panel:#ffffff;
+      --muted:#6b7280;
+      --text:#111827;
+      --primary:#2563eb;
+      --accent:#059669;
+      --warn:#b45309;
+      --danger:#b91c1c;
+      --ok:#16a34a;
+      --shadow:0 8px 20px rgba(0,0,0,.08);
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji";
+      background:radial-gradient(1200px 600px at 100% -20%, rgba(96,165,250,.15), transparent 60%),
+                 radial-gradient(800px 500px at -10% 110%, rgba(52,211,153,.15), transparent 60%),var(--bg);
+      color:var(--text);
+    }
+    header{
+      position:sticky; top:0; z-index:10; backdrop-filter:saturate(1.2) blur(10px);
+      background:linear-gradient(180deg, rgba(0,0,0,.25), rgba(0,0,0,0))
+                 ,transparent; padding:14px 18px 10px; border-bottom:1px solid rgba(255,255,255,.06);
+    }
+    .wrap{max-width:1050px; margin:0 auto; padding:0 14px}
+    .row{display:flex; align-items:center; gap:12px; flex-wrap:wrap}
+    .spacer{flex:1}
+    .brand{display:flex; align-items:center; gap:10px}
+    .logo{width:38px; height:38px; display:grid; place-items:center; border-radius:12px; background:linear-gradient(135deg, var(--primary), var(--accent)); box-shadow:var(--shadow); font-size:20px}
+    nav{display:flex; gap:6px; flex-wrap:wrap}
+    .tab{border:1px solid rgba(255,255,255,.12); background:var(--panel); color:var(--text); padding:10px 14px; border-radius:12px; cursor:pointer; transition:.2s; font-weight:600}
+    .tab[aria-selected="true"], .tab:hover{border-color:transparent; background:linear-gradient(135deg, rgba(96,165,250,.2), rgba(52,211,153,.2));}
+
+    main{max-width:1050px; margin:16px auto; padding:0 14px 28px}
+    section.panel{background:var(--panel); border:1px solid rgba(255,255,255,.08); border-radius:var(--radius); padding:18px; box-shadow:var(--shadow)}
+    .grid{display:grid; gap:14px}
+    @media(min-width:880px){
+      .grid-2{grid-template-columns: 1.1fr .9fr}
+    }
+    h1{margin:0 0 8px; font-size:22px}
+    h2{margin:14px 0 8px; font-size:18px}
+    p, label{color:var(--text)}
+    small, .muted{color:var(--muted)}
+    button, .btn{
+      border:1px solid rgba(255,255,255,.12); background:var(--panel); color:var(--text);
+      padding:10px 14px; border-radius:12px; cursor:pointer; transition:.2s; font-weight:600
+    }
+    button.primary{background:linear-gradient(135deg, var(--primary), var(--accent)); border:none}
+    button.warn{background:var(--warn); border:none}
+    button.ghost{background:transparent}
+    button:disabled{opacity:.6; cursor:not-allowed}
+    input, select, textarea{
+      width:100%; padding:10px 12px; border-radius:12px; border:1px solid rgba(255,255,255,.12); background:rgba(255,255,255,.03);
+      color:var(--text); outline:none
+    }
+    textarea{min-height:120px; resize:vertical}
+
+    .moods{display:grid; grid-template-columns: repeat(5, 1fr); gap:8px; margin-top:8px}
+    .mood{display:flex; flex-direction:column; gap:6px; align-items:center; padding:10px 8px; border-radius:14px; border:1px dashed rgba(255,255,255,.15); cursor:pointer}
+    .mood[aria-selected="true"]{border-style:solid; background:rgba(96,165,250,.14)}
+    .mood span{font-size:24px}
+    .chips{display:flex; flex-wrap:wrap; gap:8px}
+    .chip{padding:8px 10px; border-radius:9999px; border:1px solid rgba(255,255,255,.14); background:rgba(255,255,255,.04); cursor:pointer}
+    .chip[aria-pressed="true"]{background:rgba(52,211,153,.16); border-color:rgba(52,211,153,.6)}
+
+    .list{display:flex; flex-direction:column; gap:10px}
+    .item{display:flex; gap:12px; align-items:center; padding:12px; border:1px solid rgba(255,255,255,.12); border-radius:12px}
+    .dot{width:12px; height:12px; border-radius:50%}
+
+    /* Calendar */
+    .cal{display:grid; gap:6px}
+    .cal-head{display:grid; grid-template-columns: repeat(7, 1fr); gap:4px; text-align:center; font-weight:700}
+    .cal-grid{display:grid; grid-template-columns: repeat(7, 1fr); gap:4px}
+    .day{border:1px solid rgba(255,255,255,.1); min-height:68px; border-radius:10px; padding:4px; display:flex; flex-direction:column; gap:4px}
+    .day .d{font-size:12px; opacity:.8}
+    .day .badge{margin-top:auto; text-align:center; font-size:12px; padding:2px 6px; border-radius:9999px}
+    .day.out{opacity:.35}
+    .legend{display:flex; gap:12px; align-items:center; flex-wrap:wrap}
+    .legend .lg{display:flex; gap:6px; align-items:center}
+
+    /* Dialog */
+    dialog{border:none; border-radius:18px; background:var(--panel); color:var(--text); padding:0; box-shadow:var(--shadow); width:min(680px, 92vw)}
+    dialog::backdrop{background:rgba(0,0,0,.55)}
+    .dlg-head{display:flex; align-items:center; justify-content:space-between; padding:14px 16px; border-bottom:1px solid rgba(255,255,255,.08)}
+    .dlg-body{padding:16px}
+
+    /* Stats */
+    .stats{display:grid; gap:16px}
+    .card{background:rgba(255,255,255,.04); border:1px solid rgba(255,255,255,.1); border-radius:16px; padding:14px}
+    canvas{width:100%; height:280px; display:block}
+
+    /* Footer */
+    footer{opacity:.8; font-size:12px; text-align:center; padding:18px}
+
+    /* Lock Screen */
+    .lock{position:fixed; inset:0; background:var(--bg); display:none; z-index:50}
+    .lock.visible{display:grid; place-items:center}
+    .lock-card{background:var(--panel); border:1px solid rgba(255,255,255,.1); border-radius:20px; padding:20px; width:min(420px, 94vw); box-shadow:var(--shadow)}
+
+    /* Toast */
+    .toast{position:fixed; bottom:16px; right:16px; background:var(--panel); color:var(--text); border:1px solid rgba(255,255,255,.12); padding:10px 12px; border-radius:10px; box-shadow:var(--shadow); opacity:0; transform:translateY(8px); transition:.25s}
+    .toast.show{opacity:1; transform:none}
+  </style>
+</head>
+<body>
+  <div class="lock" id="lock">
+    <div class="lock-card">
+      <h2>🔒 Digite seu PIN</h2>
+      <p class="muted">Ative/desative o PIN em Configurações.</p>
+      <div class="row" style="margin:12px 0">
+        <input id="pinInput" type="password" inputmode="numeric" maxlength="8" placeholder="4-8 dígitos" />
+        <button class="primary" id="pinOk">Entrar</button>
+      </div>
+      <small class="muted">Esqueceu? Exclua o PIN limpando os dados do app no seu navegador (isso apagará seus registros).</small>
+    </div>
+  </div>
+
+  <header>
+    <div class="wrap row">
+      <div class="brand">
+        <div class="logo">🙂</div>
+        <div>
+          <div style="font-weight:800">Meu Humor & Diário</div>
+          <small class="muted">Privado • Salvo só no seu dispositivo</small>
+        </div>
+      </div>
+      <div class="spacer"></div>
+      <nav id="tabs">
+        <button class="tab" data-tab="registrar" aria-selected="true">Registrar</button>
+        <button class="tab" data-tab="historico">Histórico</button>
+        <button class="tab" data-tab="estatisticas">Estatísticas</button>
+        <button class="tab" data-tab="config">Configurações</button>
+      </nav>
+    </div>
+  </header>
+
+  <main class="grid grid-2">
+    <!-- Registrar -->
+    <section class="panel" id="view-registrar">
+      <h1>Como você está hoje? <span id="todayStr" class="muted"></span></h1>
+      <div class="moods" id="moods"></div>
+
+      <h2>Atividades</h2>
+      <div class="chips" id="activities"></div>
+
+      <h2>Anotações</h2>
+      <textarea id="note" placeholder="Escreva como foi seu dia, gratidão, metas..."></textarea>
+      <div class="row" style="margin-top:10px">
+        <input id="timeInput" type="datetime-local" />
+        <div class="spacer"></div>
+        <button id="clearBtn" class="btn">Limpar</button>
+        <button id="saveBtn" class="primary">Salvar registro</button>
+      </div>
+    </section>
+
+    <!-- Lateral: Calendário & Lembrete -->
+    <section class="panel" id="side">
+      <h1>Calendário</h1>
+      <div class="row" style="gap:8px; margin-bottom:8px">
+        <button id="prevMonth">◀</button>
+        <div class="spacer"></div>
+        <strong id="monthLabel"></strong>
+        <div class="spacer"></div>
+        <button id="nextMonth">▶</button>
+      </div>
+      <div class="cal">
+        <div class="cal-head" id="cal-head"></div>
+        <div class="cal-grid" id="cal-grid"></div>
+        <div class="legend" style="margin-top:8px">
+          <div class="lg"><span class="dot" style="background:#22c55e"></span><small>Ótimo</small></div>
+          <div class="lg"><span class="dot" style="background:#10b981"></span><small>Bom</small></div>
+          <div class="lg"><span class="dot" style="background:#939aa6"></span><small>Ok</small></div>
+          <div class="lg"><span class="dot" style="background:#f59e0b"></span><small>Ruim</small></div>
+          <div class="lg"><span class="dot" style="background:#ef4444"></span><small>Péssimo</small></div>
+        </div>
+      </div>
+      <h2 style="margin-top:16px">Lembrete diário</h2>
+      <div class="row">
+        <input id="remTime" type="time" />
+        <button id="remToggle" class="btn">Ativar</button>
+      </div>
+      <small class="muted">O lembrete funciona enquanto a página estiver aberta. Para notificações reais, adicione ao atalho da tela inicial do seu celular e deixe aberto.</small>
+    </section>
+
+    <!-- Histórico -->
+    <section class="panel" id="view-historico" hidden>
+      <h1>Histórico</h1>
+      <div class="row" style="margin-bottom:8px">
+        <input id="search" placeholder="Pesquisar (texto, atividade)" />
+        <select id="filterMood">
+          <option value="">Todos os humores</option>
+        </select>
+        <input id="fromDate" type="date" />
+        <input id="toDate" type="date" />
+        <button id="clearFilters" class="btn">Limpar filtros</button>
+      </div>
+      <div class="list" id="history"></div>
+    </section>
+
+    <!-- Estatísticas -->
+    <section class="panel" id="view-estatisticas" hidden>
+      <h1>Estatísticas</h1>
+      <div class="stats">
+        <div class="card">
+          <h2>Humor por dia (últimos 30)</h2>
+          <canvas id="chartMood"></canvas>
+        </div>
+        <div class="card">
+          <h2>Atividades mais frequentes</h2>
+          <canvas id="chartAct"></canvas>
+        </div>
+      </div>
+    </section>
+
+    <!-- Configurações -->
+    <section class="panel" id="view-config" hidden>
+      <h1>Configurações</h1>
+      <h2>Tema</h2>
+      <div class="row">
+        <button id="themeDark" class="btn">Escuro</button>
+        <button id="themeLight" class="btn">Claro</button>
+      </div>
+
+      <h2 style="margin-top:10px">PIN de bloqueio</h2>
+      <div class="row">
+        <input id="pinSet" placeholder="4-8 dígitos" inputmode="numeric" maxlength="8" />
+        <button id="savePin" class="btn">Definir/Alterar PIN</button>
+        <button id="clearPin" class="btn">Remover PIN</button>
+      </div>
+
+      <h2 style="margin-top:10px">Atividades (personalize)</h2>
+      <div class="row">
+        <input id="actInput" placeholder="Ex.: Academia, Estudo, Amigos" />
+        <button id="addAct" class="btn">Adicionar</button>
+      </div>
+      <div id="actList" class="chips" style="margin-top:8px"></div>
+
+      <h2 style="margin-top:10px">Backup</h2>
+      <div class="row">
+        <button id="exportJson" class="btn">Exportar JSON</button>
+        <button id="exportCsv" class="btn">Exportar CSV</button>
+        <label class="btn" for="importFile" style="cursor:pointer">Importar JSON</label>
+        <input id="importFile" type="file" accept="application/json" hidden />
+      </div>
+      <small class="muted">Dica: envie o arquivo para seu e-mail/Drive para guardar.</small>
+
+      <h2 style="margin-top:10px">Dados</h2>
+      <div class="row">
+        <button id="wipe" class="btn warn">Apagar tudo</button>
+      </div>
+    </section>
+  </main>
+
+  <dialog id="dlgDay">
+    <div class="dlg-head">
+      <strong id="dlgTitle">Registro</strong>
+      <button id="dlgClose" class="btn">✕</button>
+    </div>
+    <div class="dlg-body">
+      <div id="dlgContent"></div>
+    </div>
+  </dialog>
+
+  <div class="toast" id="toast"></div>
+
+  <footer>
+    Feito com ❤️. Código aberto, dados ficam apenas no seu navegador.
+  </footer>
+
+  <script>
+  // ===== Util =====
+  const $ = (q, el=document) => el.querySelector(q);
+  const $$ = (q, el=document) => Array.from(el.querySelectorAll(q));
+  const fmtDate = (d)=> new Intl.DateTimeFormat('pt-BR',{dateStyle:'medium', timeStyle:'short'}).format(d);
+  const ymd = (d)=> d.toISOString().slice(0,10);
+  const todayLocalISO = ()=>{
+    const d = new Date();
+    d.setMinutes(d.getMinutes()-d.getTimezoneOffset());
+    return d.toISOString().slice(0,16);
+  }
+  const toast = (msg)=>{ const t=$('#toast'); t.textContent=msg; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'), 2200) }
+
+  // ===== App State =====
+  const Storage = {
+    get(k, def){ try{ return JSON.parse(localStorage.getItem(k)) ?? def }catch{ return def } },
+    set(k, v){ localStorage.setItem(k, JSON.stringify(v)) },
+    del(k){ localStorage.removeItem(k) }
+  }
+  const KEYS = {
+    entries: 'dl_entries_v1',
+    settings: 'dl_settings_v1'
+  }
+
+  const Default = {
+    moods: [
+      {id:'otimo', label:'Ótimo', emoji:'🤩', color:'#22c55e'},
+      {id:'bom', label:'Bom', emoji:'🙂', color:'#10b981'},
+      {id:'ok', label:'Ok', emoji:'😐', color:'#939aa6'},
+      {id:'ruim', label:'Ruim', emoji:'😕', color:'#f59e0b'},
+      {id:'pessimo', label:'Péssimo', emoji:'😣', color:'#ef4444'}
+    ],
+    activities: ['Academia','Estudo','Trabalho','Família','Amigos','Leitura','Netflix','Caminhada','Sono bom','Comida saudável','Jogo','Igreja','Devocional','Meditação'],
+    theme:'dark',
+    reminder:{enabled:false, time:'20:00'},
+    pin:''
+  }
+
+  let settings = Object.assign({}, Default, Storage.get(KEYS.settings, {}));
+  let entries = Storage.get(KEYS.entries, []); // {id, dateISO, moodId, acts[], note}
+
+  // ===== Theme & Header =====
+  const applyTheme = ()=>{
+    document.documentElement.dataset.theme = settings.theme === 'light' ? 'light' : 'dark';
+  }
+  applyTheme();
+  $('#todayStr').textContent = `• ${new Intl.DateTimeFormat('pt-BR',{weekday:'long', day:'2-digit', month:'long'}).format(new Date())}`;
+
+  // ===== Tabs =====
+  $$('#tabs .tab').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      const id = btn.dataset.tab;
+      $$('#tabs .tab').forEach(b=>b.setAttribute('aria-selected', String(b===btn)));
+      ['registrar','historico','estatisticas','config'].forEach(v=>{
+        $('#view-'+v).hidden = (v!==id);
+      })
+      if(id==='estatisticas') drawCharts();
+      if(id==='historico') renderHistory();
+    })
+  })
+
+  // ===== Lock (PIN) =====
+  function checkLock(){
+    if(settings.pin && settings.pin.length>=4){ $('#lock').classList.add('visible') }
+  }
+  checkLock();
+  $('#pinOk').addEventListener('click', ()=>{
+    const v = $('#pinInput').value.trim();
+    if(v===settings.pin){ $('#lock').classList.remove('visible'); $('#pinInput').value=''; toast('Desbloqueado!') } else toast('PIN incorreto')
+  })
+
+  // ===== Moods UI =====
+  function renderMoods(){
+    const c = $('#moods'); c.innerHTML='';
+    Default.moods.forEach(m=>{
+      const d=document.createElement('button'); d.className='mood'; d.dataset.id=m.id;
+      d.innerHTML=`<span>${m.emoji}</span><small>${m.label}</small>`;
+      d.addEventListener('click', ()=>{
+        $$('#moods .mood').forEach(x=>x.setAttribute('aria-selected','false'));
+        d.setAttribute('aria-selected','true');
+        c.dataset.selected=m.id;
+      });
+      c.appendChild(d);
+    })
+    // fill filter dropdown
+    const f=$('#filterMood');
+    f.innerHTML = '<option value="">Todos os humores</option>' + Default.moods.map(m=>`<option value="${m.id}">${m.label}</option>`).join('');
+  }
+  renderMoods();
+
+  // ===== Activities UI =====
+  function renderActivities(){
+    const acts = settings.activities;
+    const c = $('#activities'); c.innerHTML='';
+    acts.forEach(a=>{
+      const b=document.createElement('button');
+      b.className='chip'; b.textContent=a; b.type='button';
+      b.addEventListener('click', ()=> b.setAttribute('aria-pressed', b.getAttribute('aria-pressed')!== 'true'))
+      c.appendChild(b);
+    })
+    const list = $('#actList'); list.innerHTML='';
+    acts.forEach(a=>{
+      const s=document.createElement('span'); s.className='chip'; s.textContent=a;
+      s.title='Clique para remover';
+      s.addEventListener('click', ()=>{
+        settings.activities = settings.activities.filter(x=>x!==a);
+        Storage.set(KEYS.settings, settings);
+        renderActivities();
+      })
+      list.appendChild(s);
+    })
+  }
+  renderActivities();
+
+  // Prefill date-time
+  $('#timeInput').value = todayLocalISO();
+
+  // Clear form
+  $('#clearBtn').addEventListener('click', ()=>{
+    $$('#moods .mood').forEach(x=>x.setAttribute('aria-selected','false'));
+    $('#activities').querySelectorAll('.chip[aria-pressed="true"]').forEach(x=>x.setAttribute('aria-pressed','false'));
+    $('#note').value='';
+    $('#timeInput').value = todayLocalISO();
+  })
+
+  // Save entry
+  $('#saveBtn').addEventListener('click', ()=>{
+    const moodId = $('#moods').dataset.selected || '';
+    if(!moodId){ toast('Escolha um humor 🙂'); return }
+    const acts = $$('#activities .chip[aria-pressed="true"]').map(x=>x.textContent);
+    const note = $('#note').value.trim();
+    const dt = new Date($('#timeInput').value || new Date());
+    if(isNaN(+dt)){ toast('Data inválida'); return }
+    const e = { id: crypto.randomUUID(), dateISO: dt.toISOString(), moodId, acts, note };
+    entries.push(e);
+    entries.sort((a,b)=> new Date(b.dateISO)-new Date(a.dateISO));
+    Storage.set(KEYS.entries, entries);
+    toast('Registro salvo!');
+    renderCalendar(curMonth);
+    renderHistory();
+  })
+
+  // ===== Calendar =====
+  const week = ['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'];
+  $('#cal-head').innerHTML = week.map(d=>`<div>${d}</div>`).join('');
+
+  function monthInfo(date){
+    const y = date.getFullYear(); const m = date.getMonth();
+    const first = new Date(y,m,1); const last = new Date(y,m+1,0);
+    const start = new Date(first); start.setDate(first.getDate()-((first.getDay()+6)%7)); // start Monday-like grid but labels stay pt
+    const end = new Date(last); end.setDate(last.getDate() + (13 - ((last.getDay()+6)%7)) );
+    return {y,m,first,last,start,end}
+  }
+
+  function moodColor(id){ return (Default.moods.find(x=>x.id===id)||{}).color || '#999' }
+  function moodLabel(id){ return (Default.moods.find(x=>x.id===id)||{}).label || '' }
+
+  let curMonth = new Date(); curMonth.setDate(1);
+
+  function renderCalendar(date){
+    const {y,m, start, end} = monthInfo(date);
+    $('#monthLabel').textContent = new Intl.DateTimeFormat('pt-BR',{month:'long', year:'numeric'}).format(new Date(y,m,1));
+    const grid = $('#cal-grid'); grid.innerHTML='';
+
+    for(let d=new Date(start); d<=end; d.setDate(d.getDate()+1)){
+      const cell = document.createElement('div'); cell.className='day';
+      if(d.getMonth()!==m) cell.classList.add('out');
+      const key = ymd(d);
+      const dayEntries = entries.filter(e=> e.dateISO.slice(0,10)===key ).sort((a,b)=> new Date(a.dateISO)-new Date(b.dateISO));
+      const top = document.createElement('div'); top.className='d'; top.textContent = d.getDate();
+      const dots = document.createElement('div'); dots.style.display='flex'; dots.style.gap='4px'; dots.style.flexWrap='wrap';
+      dayEntries.slice(0,3).forEach(e=>{
+        const dot = document.createElement('span'); dot.className='dot'; dot.style.background = moodColor(e.moodId); dots.appendChild(dot);
+      })
+      const badge = document.createElement('div'); badge.className='badge';
+      if(dayEntries.length){
+        // show last mood summary
+        const last = dayEntries[dayEntries.length-1];
+        badge.style.background = moodColor(last.moodId);
+        badge.style.color = '#000';
+        badge.textContent = moodLabel(last.moodId);
+      }
+      cell.appendChild(top); cell.appendChild(dots); if(dayEntries.length) cell.appendChild(badge);
+      cell.addEventListener('click', ()=> openDayDialog(key, dayEntries));
+      grid.appendChild(cell);
+    }
+  }
+
+  function openDayDialog(ymdStr, dayEntries){
+    $('#dlgTitle').textContent = new Intl.DateTimeFormat('pt-BR',{dateStyle:'full'}).format(new Date(ymdStr));
+    const c = $('#dlgContent');
+    if(!dayEntries.length){ c.innerHTML = '<p class="muted">Sem registros neste dia.</p>'; }
+    else{
+      c.innerHTML = dayEntries.map(e=>`
+        <div class="item">
+          <span class="dot" style="background:${moodColor(e.moodId)}"></span>
+          <div class="spacer">
+            <div><strong>${moodLabel(e.moodId)}</strong> • <small class="muted">${fmtDate(new Date(e.dateISO))}</small></div>
+            <div style="margin-top:6px"><small>${e.acts.join(', ')}</small></div>
+            ${e.note? `<div class="muted" style="margin-top:6px; white-space:pre-wrap">${e.note.replace(/[&<>]/g, s=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[s]))}</div>`: ''}
+          </div>
+          <button class="btn" data-id="${e.id}">Editar</button>
+          <button class="btn" data-del="${e.id}">Excluir</button>
+        </div>
+      `).join('');
+
+      c.querySelectorAll('button[data-del]').forEach(b=> b.addEventListener('click', ()=>{
+        const id = b.dataset.del; entries = entries.filter(x=>x.id!==id); Storage.set(KEYS.entries, entries); toast('Excluído');
+        const list = entries.filter(e=> e.dateISO.slice(0,10)===ymdStr ); openDayDialog(ymdStr, list); renderCalendar(curMonth); renderHistory();
+      }))
+
+      c.querySelectorAll('button[data-id]').forEach(b=> b.addEventListener('click', ()=>{
+        const e = entries.find(x=>x.id===b.dataset.id); if(!e) return;
+        // preload
+        $('#note').value = e.note || '';
+        $('#timeInput').value = e.dateISO.slice(0,16);
+        $('#activities').querySelectorAll('.chip').forEach(ch=> ch.setAttribute('aria-pressed', e.acts.includes(ch.textContent)?'true':'false'));
+        const moodBtn = $(`#moods .mood[data-id="${e.moodId}"]`);
+        if(moodBtn){ $$('#moods .mood').forEach(x=>x.setAttribute('aria-selected','false')); moodBtn.setAttribute('aria-selected','true'); $('#moods').dataset.selected=e.moodId }
+        $('#dlgClose').click();
+        // replace on save: remove original id & push as new at edited time
+        $('#saveBtn').onclick = ()=>{
+          const moodId = $('#moods').dataset.selected || '';
+          if(!moodId){ toast('Escolha um humor 🙂'); return }
+          const acts = $$('#activities .chip[aria-pressed="true"]').map(x=>x.textContent);
+          const note = $('#note').value.trim();
+          const dt = new Date($('#timeInput').value || new Date());
+          if(isNaN(+dt)){ toast('Data inválida'); return }
+          entries = entries.filter(x=>x.id!==e.id);
+          entries.push({ id: crypto.randomUUID(), dateISO: dt.toISOString(), moodId, acts, note });
+          entries.sort((a,b)=> new Date(b.dateISO)-new Date(a.dateISO));
+          Storage.set(KEYS.entries, entries);
+          toast('Registro atualizado!');
+          renderCalendar(curMonth); renderHistory();
+          // restore save handler
+          restoreSaveHandler();
+        }
+      }))
+    }
+    const dlg = $('#dlgDay'); dlg.showModal();
+  }
+  $('#dlgClose').addEventListener('click', ()=> $('#dlgDay').close())
+
+  $('#prevMonth').addEventListener('click', ()=>{ curMonth.setMonth(curMonth.getMonth()-1); renderCalendar(curMonth) })
+  $('#nextMonth').addEventListener('click', ()=>{ curMonth.setMonth(curMonth.getMonth()+1); renderCalendar(curMonth) })
+
+  renderCalendar(curMonth);
+
+  // ===== History =====
+  function renderHistory(){
+    const q = $('#search').value.toLowerCase().trim();
+    const mf = $('#filterMood').value;
+    const fd = $('#fromDate').value; const td = $('#toDate').value;
+
+    let list = entries.slice();
+    if(q) list = list.filter(e=> (e.note||'').toLowerCase().includes(q) || e.acts.join(', ').toLowerCase().includes(q));
+    if(mf) list = list.filter(e=> e.moodId===mf);
+    if(fd) list = list.filter(e=> e.dateISO.slice(0,10) >= fd);
+    if(td) list = list.filter(e=> e.dateISO.slice(0,10) <= td);
+
+    const c = $('#history'); c.innerHTML='';
+    if(!list.length){ c.innerHTML = '<p class="muted">Nada por aqui ainda.</p>'; return }
+    list.forEach(e=>{
+      const it = document.createElement('div'); it.className='item';
+      it.innerHTML = `
+        <span class="dot" style="background:${moodColor(e.moodId)}"></span>
+        <div class="spacer">
+          <div><strong>${moodLabel(e.moodId)}</strong> • <small class="muted">${fmtDate(new Date(e.dateISO))}</small></div>
+          ${e.acts.length? `<div style="margin-top:6px"><small>${e.acts.join(', ')}</small></div>`:''}
+          ${e.note? `<div class="muted" style="margin-top:6px; white-space:pre-wrap">${e.note.replace(/[&<>]/g, s=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[s]))}</div>`:''}
+        </div>
+        <button class="btn" data-edit="${e.id}">Editar</button>
+        <button class="btn" data-del="${e.id}">Excluir</button>
+      `;
+      c.appendChild(it);
+    })
+
+    c.querySelectorAll('button[data-del]').forEach(b=> b.addEventListener('click', ()=>{
+      const id = b.dataset.del; entries = entries.filter(x=>x.id!==id); Storage.set(KEYS.entries, entries); toast('Excluído'); renderHistory(); renderCalendar(curMonth);
+    }))
+
+    c.querySelectorAll('button[data-edit]').forEach(b=> b.addEventListener('click', ()=>{
+      const e = entries.find(x=>x.id===b.dataset.edit); if(!e) return;
+      // preload form
+      $('#note').value = e.note || '';
+      $('#timeInput').value = e.dateISO.slice(0,16);
+      $('#activities').querySelectorAll('.chip').forEach(ch=> ch.setAttribute('aria-pressed', e.acts.includes(ch.textContent)?'true':'false'));
+      const moodBtn = $(`#moods .mood[data-id="${e.moodId}"]`);
+      if(moodBtn){ $$('#moods .mood').forEach(x=>x.setAttribute('aria-selected','false')); moodBtn.setAttribute('aria-selected','true'); $('#moods').dataset.selected=e.moodId }
+      // swap save handler to update
+      $('#saveBtn').onclick = ()=>{
+        const moodId = $('#moods').dataset.selected || '';
+        if(!moodId){ toast('Escolha um humor 🙂'); return }
+        const acts = $$('#activities .chip[aria-pressed="true"]').map(x=>x.textContent);
+        const note = $('#note').value.trim();
+        const dt = new Date($('#timeInput').value || new Date());
+        if(isNaN(+dt)){ toast('Data inválida'); return }
+        entries = entries.filter(x=>x.id!==e.id);
+        entries.push({ id: crypto.randomUUID(), dateISO: dt.toISOString(), moodId, acts, note });
+        entries.sort((a,b)=> new Date(b.dateISO)-new Date(a.dateISO));
+        Storage.set(KEYS.entries, entries);
+        toast('Registro atualizado!');
+        renderCalendar(curMonth); renderHistory();
+        restoreSaveHandler();
+        switchTab('registrar');
+      }
+      switchTab('registrar');
+    }))
+  }
+  $('#search').addEventListener('input', renderHistory);
+  $('#filterMood').addEventListener('change', renderHistory);
+  $('#fromDate').addEventListener('change', renderHistory);
+  $('#toDate').addEventListener('change', renderHistory);
+  $('#clearFilters').addEventListener('click', ()=>{ $('#search').value=''; $('#filterMood').value=''; $('#fromDate').value=''; $('#toDate').value=''; renderHistory() })
+  renderHistory();
+
+  // Restore default save behavior (create new)
+  function restoreSaveHandler(){
+    $('#saveBtn').onclick = ()=>{
+      const moodId = $('#moods').dataset.selected || '';
+      if(!moodId){ toast('Escolha um humor 🙂'); return }
+      const acts = $$('#activities .chip[aria-pressed="true"]').map(x=>x.textContent);
+      const note = $('#note').value.trim();
+      const dt = new Date($('#timeInput').value || new Date());
+      if(isNaN(+dt)){ toast('Data inválida'); return }
+      const e = { id: crypto.randomUUID(), dateISO: dt.toISOString(), moodId, acts, note };
+      entries.push(e); entries.sort((a,b)=> new Date(b.dateISO)-new Date(a.dateISO));
+      Storage.set(KEYS.entries, entries);
+      toast('Registro salvo!');
+      renderCalendar(curMonth); renderHistory();
+    }
+  }
+
+  function switchTab(id){
+    $$('#tabs .tab').forEach(b=>{
+      const sel = b.dataset.tab===id; b.setAttribute('aria-selected', String(sel));
+      $('#view-'+b.dataset.tab).hidden = !sel;
+    })
+  }
+
+  // ===== Stats =====
+  function drawCharts(){
+    drawMoodChart();
+    drawActChart();
+  }
+
+  function drawMoodChart(){
+    const c = $('#chartMood'); const g = c.getContext('2d');
+    const days = []; const now = new Date();
+    for(let i=29;i>=0;i--){ const d = new Date(now); d.setDate(now.getDate()-i); days.push(ymd(d)) }
+    const data = days.map(k=>{
+      const day = entries.filter(e=> e.dateISO.slice(0,10)===k);
+      if(!day.length) return 0;
+      const score = {otimo:5,bom:4,ok:3,ruim:2,pessimo:1};
+      return Math.round( day.reduce((s,e)=> s+ (score[e.moodId]||3), 0) / day.length );
+    });
+    // clear
+    g.clearRect(0,0,c.width,c.height);
+    const W=c.width, H=c.height, pad=30; const max=5, min=0;
+    // axes
+    g.globalAlpha=0.3; g.strokeStyle='#888'; g.beginPath(); g.moveTo(pad, pad); g.lineTo(pad, H-pad); g.lineTo(W-pad, H-pad); g.stroke(); g.globalAlpha=1;
+    // grid + labels
+    g.fillStyle=getComputedStyle(document.documentElement).getPropertyValue('--text');
+    g.globalAlpha=.6; g.font='12px system-ui';
+    for(let v=1; v<=5; v++){
+      const y = H-pad - ( (v-min)/(max-min) )*(H-2*pad);
+      g.strokeStyle='rgba(255,255,255,.15)'; g.beginPath(); g.moveTo(pad,y); g.lineTo(W-pad,y); g.stroke();
+      g.fillText(v.toString(), 6, y+4);
+    }
+    g.globalAlpha=1;
+    // line
+    const step=(W-2*pad)/(days.length-1); g.beginPath();
+    data.forEach((v,i)=>{
+      const x = pad + i*step;
+      const y = H-pad - ( (v-min)/(max-min) )*(H-2*pad);
+      if(i===0) g.moveTo(x,y); else g.lineTo(x,y);
+    });
+    g.lineWidth=2.5; g.strokeStyle='#60a5fa'; g.stroke();
+  }
+
+  function drawActChart(){
+    const c = $('#chartAct'); const g = c.getContext('2d');
+    const freq = {};
+    entries.forEach(e=> e.acts.forEach(a=> freq[a]=(freq[a]||0)+1));
+    const pairs = Object.entries(freq).sort((a,b)=> b[1]-a[1]).slice(0,8);
+    const labels = pairs.map(p=>p[0]); const values = pairs.map(p=>p[1]);
+    // clear
+    g.clearRect(0,0,c.width,c.height);
+    const W=c.width, H=c.height, pad=40; const max = Math.max(1, ...values);
+    const barW = (W-2*pad)/Math.max(1, values.length) - 10;
+    g.font='12px system-ui'; g.fillStyle=getComputedStyle(document.documentElement).getPropertyValue('--text');
+    values.forEach((v,i)=>{
+      const x = pad + i*(barW+10);
+      const h = (v/max)*(H-2*pad);
+      const y = H-pad - h;
+      g.fillStyle = '#34d399'; g.fillRect(x,y, barW, h);
+      g.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--text');
+      g.save(); g.translate(x+barW/2, H-pad+12); g.rotate(-Math.PI/4); g.textAlign='left'; g.fillText(labels[i], 0, 0); g.restore();
+      g.fillText(String(v), x + barW/2 - 4, y-4);
+    })
+  }
+
+  // ===== Settings =====
+  $('#themeDark').addEventListener('click', ()=>{ settings.theme='dark'; Storage.set(KEYS.settings, settings); applyTheme(); toast('Tema escuro') })
+  $('#themeLight').addEventListener('click', ()=>{ settings.theme='light'; Storage.set(KEYS.settings, settings); applyTheme(); toast('Tema claro') })
+
+  $('#addAct').addEventListener('click', ()=>{
+    const v = $('#actInput').value.split(',').map(s=>s.trim()).filter(Boolean);
+    if(!v.length) return;
+    settings.activities = Array.from(new Set([...settings.activities, ...v])).slice(0,50);
+    Storage.set(KEYS.settings, settings);
+    $('#actInput').value='';
+    renderActivities();
+    toast('Atividade(s) adicionada(s)');
+  })
+
+  $('#savePin').addEventListener('click', ()=>{
+    const v = $('#pinSet').value.trim();
+    if(v && (v.length<4 || v.length>8 || /\D/.test(v))){ toast('Use 4 a 8 dígitos'); return }
+    settings.pin = v; Storage.set(KEYS.settings, settings);
+    $('#pinSet').value=''; toast(v? 'PIN definido' : 'PIN removido'); checkLock();
+  })
+  $('#clearPin').addEventListener('click', ()=>{ settings.pin=''; Storage.set(KEYS.settings, settings); toast('PIN removido'); $('#lock').classList.remove('visible') })
+
+  // Reminder
+  $('#remTime').value = settings.reminder.time || '20:00';
+  $('#remToggle').textContent = settings.reminder.enabled? 'Desativar' : 'Ativar';
+  $('#remToggle').addEventListener('click', ()=>{
+    settings.reminder.enabled = !settings.reminder.enabled; settings.reminder.time = $('#remTime').value || '20:00';
+    Storage.set(KEYS.settings, settings);
+    $('#remToggle').textContent = settings.reminder.enabled? 'Desativar' : 'Ativar';
+    toast(settings.reminder.enabled? 'Lembrete ativado' : 'Lembrete desativado');
+  })
+  setInterval(()=>{
+    if(!settings.reminder.enabled) return;
+    const now = new Date();
+    const hh = String(now.getHours()).padStart(2,'0');
+    const mm = String(now.getMinutes()).padStart(2,'0');
+    if(`${hh}:${mm}` === (settings.reminder.time||'20:00')){
+      alert('Hora de registrar seu humor de hoje!');
+    }
+  }, 60000);
+
+  // Backup export/import
+  function download(filename, text){
+    const a=document.createElement('a'); a.href=URL.createObjectURL(new Blob([text],{type:'text/plain'})); a.download=filename; a.click(); URL.revokeObjectURL(a.href);
+  }
+  $('#exportJson').addEventListener('click', ()=>{
+    const payload = { entries, settings };
+    download('backup-humor.json', JSON.stringify(payload, null, 2));
+  })
+  $('#exportCsv').addEventListener('click', ()=>{
+    const header = 'id,data_iso,humor,atividades,nota\n';
+    const rows = entries.map(e=> [e.id, e.dateISO, e.moodId, '"'+e.acts.join('; ').replaceAll('"','""')+'"', '"'+(e.note||'').replaceAll('"','""')+'"'].join(','));
+    download('registros.csv', header + rows.join('\n'));
+  })
+  $('#importFile').addEventListener('change', (ev)=>{
+    const f = ev.target.files[0]; if(!f) return;
+    const r = new FileReader(); r.onload = ()=>{
+      try{
+        const obj = JSON.parse(r.result);
+        if(obj.entries && Array.isArray(obj.entries)) entries = obj.entries;
+        if(obj.settings && typeof obj.settings==='object') settings = Object.assign({}, Default, obj.settings);
+        Storage.set(KEYS.entries, entries); Storage.set(KEYS.settings, settings);
+        applyTheme(); renderActivities(); renderCalendar(curMonth); renderHistory();
+        toast('Importado com sucesso');
+      }catch(e){ toast('Arquivo inválido') }
+    }
+    r.readAsText(f);
+  })
+
+  // Wipe
+  $('#wipe').addEventListener('click', ()=>{
+    if(confirm('Tem certeza que deseja apagar TUDO? Esta ação não pode ser desfeita.')){
+      entries = []; settings = Object.assign({}, Default);
+      Storage.set(KEYS.entries, entries); Storage.set(KEYS.settings, settings);
+      applyTheme(); renderActivities(); renderCalendar(curMonth); renderHistory(); toast('Tudo apagado');
+    }
+  })
+
+  // Ensure default save
+  restoreSaveHandler();
+  </script>
+</body>
+</html>
