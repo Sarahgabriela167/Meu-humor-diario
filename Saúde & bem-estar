@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Qualidade de Vida</title>
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; font-family: Arial,sans-serif; }
+    body { line-height:1.6; color:#333; }
+    header {
+      position: sticky; top:0; background:#2ecc71; color:white;
+      display:flex; align-items:center; justify-content:space-between;
+      padding:15px 20px; z-index:100;
+    }
+    .logo { font-size:1.4rem; font-weight:bold; }
+    nav ul { list-style:none; display:flex; gap:15px; }
+    nav a {
+      color:white; text-decoration:none; font-weight:bold;
+      transition:opacity .2s;
+    }
+    nav a:hover { opacity:0.8; }
+    .banner {
+      background:#27ae60; color:white; text-align:center;
+      padding:80px 20px;
+    }
+    .banner h1 { font-size:2.5rem; margin-bottom:10px; }
+    .banner p { font-size:1.2rem; }
+    section { padding:40px 20px; max-width:900px; margin: auto; }
+    section h2 { margin-bottom:15px; color:#27ae60; }
+    section h3 { margin-top:20px; color:#2c3e50; }
+    section p, section ul { margin-bottom:20px; }
+    section ul { margin-left:20px; list-style: disc; }
+    footer {
+      background:#2ecc71; color:white; text-align:center;
+      padding:20px; margin-top:40px;
+    }
+    .search-bar {
+      margin-left: 30px;
+      flex: 1;
+      max-width: 300px;
+      position: relative;
+    }
+    .search-bar input {
+      width: 100%;
+      padding: 7px 30px 7px 10px;
+      border-radius: 20px;
+      border: none;
+      outline: none;
+      font-size: 1rem;
+    }
+    .search-bar .search-icon {
+      position: absolute;
+      right: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #27ae60;
+      pointer-events: none;
+    }
+    @media (max-width:768px) {
+      nav ul { flex-direction:column; background:#27ae60; position:absolute; top:60px; right:0; width:200px; display:none; }
+      nav.open ul { display:flex; }
+      .menu-toggle { display:block; font-size:1.5rem; cursor:pointer; }
+      .search-bar { max-width: 100%; margin: 10px 0 0 0; }
+    }
+    @media (min-width:769px) { .menu-toggle { display:none; } }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="logo">Qualidade de Vida</div>
+  <div class="search-bar">
+    <input type="text" id="searchInput" placeholder="Pesquisar...">
+    <span class="search-icon">&#128269;</span>
+    <button id="clearSearch" style="position:absolute; right:35px; top:50%; transform:translateY(-50%); background:none; border:none; color:#27ae60; font-size:1.1rem; cursor:pointer;">&#10006;</button>
+  </div>
+  <nav id="nav">
+    <ul>
+      <li><a href="#conceito">Conceito</a></li>
+      <li><a href="#saude-fisica">Saúde Física</a></li>
+      <li><a href="#saude-mental">Saúde Mental</a></li>
+      <li><a href="#stress">Stress</a></li>
+      <li><a href="#trabalho">No Trabalho</a></li>
+      <li><a href="#promocao">Promoção</a></li>
+      <li><a href="#obesidade">Obesidade Infantil</a></li>
+      <li><a href="contraceptivos.html">Contraceptivos</a></li>
+    </ul>
+  </nav>
+  <div class="menu-toggle" id="menu-toggle">☰</div>
+</header>
+
+<section class="banner">
+  <h1>Qualidade de Vida</h1>
+  <p>Entenda o que é e como promovê-la em seu dia a dia</p>
+</section>
+
+<section id="conceito">
+  <h2>Conceito de Qualidade de Vida</h2>
+  <p>
+    A qualidade de vida é a percepção que cada indivíduo tem da sua posição na vida, dentro do contexto cultural, expectativas e valores em que está inserido.
+  </p>
+</section>
+
+<section id="saude-fisica">
+  <h2>Qualidade de Vida e Saúde Física</h2>
+  <p>
+    A saúde física influencia diretamente a qualidade de vida. Atividade física e alimentação equilibrada têm impacto profundo no bem-estar individual.
+  </p>
+</section>
+
+<section id="saude-mental">
+  <h2>Qualidade de Vida e Saúde Mental</h2>
+  <p>
+    A saúde mental é tão essencial quanto a física. Estresse, ansiedade e burnout podem comprometer significativamente a qualidade de vida.
+  </p>
+</section>
+
+<section id="stress">
+  <h2>Stress e Qualidade de Vida</h2>
+  <p>
+    O stress é um problema contemporâneo com fortes implicações para a saúde física e emocional, afetando nossa qualidade de vida.
+  </p>
+</section>
+
+<section id="trabalho">
+  <h2>Qualidade de Vida no Trabalho</h2>
+  <p>
+    Ambientes de trabalho saudáveis, com equilíbrio entre vida pessoal e profissional, são fundamentais para melhorar a qualidade de vida.
+  </p>
+</section>
+
+<section id="promocao">
+  <h2>Promoção e Prevenção da Saúde</h2>
+  <p>
+    Promover a saúde vai além da prevenção de doenças: é melhorar nosso bem-estar físico, mental e social.
+  </p>
+</section>
+
+<!-- Nova seção -->
+<section id="obesidade">
+  <h2>Obesidade Infantil</h2>
+
+  <h3>1. Diversas causas</h3>
+  <p>
+    Embora exista uma parcela de casos associados a causas genéticas, hormonais ou medicamentosas, a maioria tem origem considerada exógena. Isso quer dizer que a causa está ligada a fatores externos, como hábitos não saudáveis.
+  </p>
+  <p>
+    Entre eles estão alimentação inadequada — com excesso de ultraprocessados ricos em calorias, açúcares e gorduras — e o sedentarismo, com falta de exercícios e uso exagerado de telas.
+  </p>
+
+  <h3>2. Diagnóstico complexo</h3>
+  <p>
+    O diagnóstico de obesidade não deve ser feito apenas com base na percepção visual. É resultado de uma análise matemática cuidadosa: o IMC (peso ÷ altura²), ajustado por idade e sexo.
+  </p>
+  <p>
+    Crianças de 5 a 19 anos: sobrepeso = IMC &gt; +1 DP; obesidade = IMC &gt; +2 DP. <br>
+    Menores de 5 anos: sobrepeso = IMC &gt; +2 DP; obesidade = IMC &gt; +3 DP.
+  </p>
+  <p>
+    Outros marcadores: circunferência da cintura, histórico familiar, exames laboratoriais e padrão de crescimento.
+  </p>
+
+  <h3>3. Impactos físicos, emocionais e sociais</h3>
+  <p>
+    A obesidade infantil aumenta o risco de várias doenças crônicas não transmissíveis:
+  </p>
+  <ul>
+    <li>Diabetes tipo 2</li>
+    <li>Doenças cardiovasculares (hipertensão, dislipidemia)</li>
+    <li>Problemas osteoarticulares (dores nas costas, quadril, joelhos)</li>
+    <li>Apneia do sono</li>
+    <li>Puberdade precoce e distúrbios hormonais</li>
+  </ul>
+  <p>
+    Além disso, o preconceito social pode prejudicar a autoestima e aumentar o risco de ansiedade e depressão.
+  </p>
+
+  <h3>4. Mudanças no estilo de vida</h3>
+  <p>
+    A obesidade infantil pode ser prevenida e revertida com:
+  </p>
+  <ul>
+    <li>Introdução alimentar adequada</li>
+    <li>Alimentação saudável em casa</li>
+    <li>Redução de bebidas açucaradas e fast-food</li>
+    <li>Prática regular de atividades físicas</li>
+    <li>Limitação do tempo de tela</li>
+    <li>Rotina de sono equilibrada</li>
+  </ul>
+</section>
+
+<!-- Nova seção: Saúde Menstrual Desregulada -->
+<section id="saude-menstrual">
+  <h2>Saúde Menstrual Desregulada</h2>
+  <p>
+    A menstruação desregulada é caracterizada por ciclos menstruais irregulares, atrasos, antecipações ou alterações no fluxo. Essa condição pode ser causada por diversos fatores, como estresse, alterações hormonais, distúrbios alimentares, uso de medicamentos, síndrome dos ovários policísticos (SOP), entre outros.
+  </p>
+  <p>
+    É importante observar os sinais do corpo e buscar orientação médica quando há mudanças significativas no padrão menstrual, como sangramento intenso, ausência de menstruação por vários meses ou dores intensas. O acompanhamento profissional é fundamental para identificar a causa e indicar o tratamento adequado, que pode envolver mudanças no estilo de vida, uso de medicamentos ou acompanhamento ginecológico regular.
+  </p>
+  <p>
+    Manter hábitos saudáveis, como alimentação equilibrada, prática de atividades físicas e controle do estresse, contribui para o equilíbrio hormonal e para a saúde menstrual. O diálogo aberto sobre o tema também ajuda a combater tabus e promove o cuidado integral da saúde feminina.
+  </p>
+</section>
+
+<!-- Adicione um link para a nova página -->
+<section style="text-align:center; margin:40px 0;">
+  <a href="contraceptivos.html" style="background:#27ae60; color:white; padding:15px 30px; border-radius:25px; text-decoration:none; font-size:1.2rem;">
+    Saiba mais sobre métodos contraceptivos &rarr;
+  </a>
+</section>
+
+<!-- Nova seção de contato -->
+<section id="contato" style="background:#f4f4f4; border-radius:10px; padding:30px; max-width:600px; margin:40px auto;">
+  <h2>Contato e Indicação de Hospital Público</h2>
+  <p>
+    <strong>E-mail:</strong> <a href="mailto:contato@qualidadedevida.com.br">contato@qualidadedevida.com.br</a><br>
+    <strong>Telefone:</strong> <a href="tel:+5511999999999">(11) 99999-9999</a><br>
+    <strong>Hospital Público Indicado:</strong> <br>
+    Hospital das Clínicas da Faculdade de Medicina da USP<br>
+    Av. Dr. Enéas Carvalho de Aguiar, 255 - Cerqueira César, São Paulo - SP, 05403-000<br>
+    <a href="https://www.hc.fm.usp.br/" target="_blank">Site oficial</a>
+  </p>
+</section>
+
+<footer>
+  <p>&copy; 2025 Qualidade de Vida | Inspirado em Saúde e Bem-Estar</p>
+  <p>
+    Contato: <a href="mailto:contato@qualidadedevida.com.br">contato@qualidadedevida.com.br</a> | 
+    Tel: <a href="tel:+5511999999999">(11) 99999-9999</a> <br>
+    Hospital Público: Hospital das Clínicas da FMUSP, 
+    <a href="https://www.hc.fm.usp.br/" target="_blank">hc.fm.usp.br</a>
+  </p>
+</footer>
+
+<script>
+  const toggle = document.getElementById('menu-toggle');
+  const nav = document.getElementById('nav');
+  toggle.addEventListener('click', () => {
+    nav.classList.toggle('open');
+  });
+
+  // Barra de pesquisa: filtra seções pelo texto
+  const searchInput = document.getElementById('searchInput');
+  const clearSearch = document.getElementById('clearSearch');
+  // Seleciona apenas as seções principais (ignora banner, rodapé, links extras)
+  function getMainSections() {
+    return Array.from(document.querySelectorAll('section')).filter(section => {
+      // Exclui seções que não fazem parte do conteúdo principal
+      return !section.classList.contains('banner') &&
+             !section.hasAttribute('style') &&
+             section.id !== '';
+    });
+  }
+  searchInput.addEventListener('input', function() {
+    const query = this.value.toLowerCase();
+    getMainSections().forEach(section => {
+      if (section.textContent.toLowerCase().includes(query) || !query) {
+        section.style.display = '';
+      } else {
+        section.style.display = 'none';
+      }
+    });
+  });
+  clearSearch.addEventListener('click', function() {
+    searchInput.value = '';
+    getMainSections().forEach(section => {
+      section.style.display = '';
+    });
+    searchInput.focus();
+  });
+</script>
+
+</body>
+</html>
+  <h3>Disponibilidade no SUS</h3>
+  <p>
+    Em 2025, o desogestrel foi incorporado ao Sistema Único de Saúde (SUS), permitindo que mais mulheres tenham acesso a esse método contraceptivo seguro e eficaz.
+  </p>
+</section>
+
+<footer>
+  <p>&copy; 2025 Qualidade de Vida | Inspirado em Saúde e Bem-Estar</p>
+</footer>
+
+<script>
+  const toggle = document.getElementById('menu-toggle');
+  const nav = document.getElementById('nav');
+  toggle.addEventListener('click', () => {
+    nav.classList.toggle('open');
+  });
+
+  // Barra de pesquisa: filtra seções pelo texto
+  const searchInput = document.getElementById('searchInput');
+  searchInput.addEventListener('input', function() {
+    const query = this.value.toLowerCase();
+    document.querySelectorAll('section').forEach(section => {
+      if (section.textContent.toLowerCase().includes(query) || !query) {
+        section.style.display = '';
+      } else {
+        section.style.display = 'none';
+      }
+    });
+  });
+</script>
+
+</body>
+</html>
