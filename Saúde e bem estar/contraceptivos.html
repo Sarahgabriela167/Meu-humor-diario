@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Métodos Contraceptivos</title>
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; font-family: Arial,sans-serif; }
+    body { line-height:1.6; color:#333; }
+    header {
+      position: sticky; top:0; background:#2ecc71; color:white;
+      display:flex; align-items:center; justify-content:space-between;
+      padding:15px 20px; z-index:100;
+    }
+    .logo { font-size:1.4rem; font-weight:bold; }
+    nav ul { list-style:none; display:flex; gap:15px; }
+    nav a {
+      color:white; text-decoration:none; font-weight:bold;
+      transition:opacity .2s;
+    }
+    nav a:hover { opacity:0.8; }
+    .banner {
+      background:#27ae60; color:white; text-align:center;
+      padding:80px 20px;
+    }
+    .banner h1 { font-size:2.5rem; margin-bottom:10px; }
+    .banner p { font-size:1.2rem; }
+    section { padding:40px 20px; max-width:900px; margin: auto; }
+    section h2 { margin-bottom:15px; color:#27ae60; }
+    section h3 { margin-top:20px; color:#2c3e50; }
+    section p, section ul { margin-bottom:20px; }
+    section ul { margin-left:20px; list-style: disc; }
+    footer {
+      background:#2ecc71; color:white; text-align:center;
+      padding:20px; margin-top:40px;
+    }
+    .search-bar {
+      margin-left: 30px;
+      flex: 1;
+      max-width: 300px;
+      position: relative;
+    }
+    .search-bar input {
+      width: 100%;
+      padding: 7px 30px 7px 10px;
+      border-radius: 20px;
+      border: none;
+      outline: none;
+      font-size: 1rem;
+    }
+    .search-bar .search-icon {
+      position: absolute;
+      right: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #27ae60;
+      pointer-events: none;
+    }
+    @media (max-width:768px) {
+      nav ul { flex-direction:column; background:#27ae60; position:absolute; top:60px; right:0; width:200px; display:none; }
+      nav.open ul { display:flex; }
+      .menu-toggle { display:block; font-size:1.5rem; cursor:pointer; }
+      .search-bar { max-width: 100%; margin: 10px 0 0 0; }
+    }
+    @media (min-width:769px) { .menu-toggle { display:none; } }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="logo">Saúde & Bem-Estar</div>
+  <div class="search-bar">
+    <input type="text" id="searchInput" placeholder="Pesquisar...">
+    <span class="search-icon">&#128269;</span>
+  </div>
+  <nav id="nav">
+    <ul>
+      <li><a href="index.html#conceito">Conceito</a></li>
+      <li><a href="index.html#saude-fisica">Saúde Física</a></li>
+      <li><a href="index.html#saude-mental">Saúde Mental</a></li>
+      <li><a href="index.html#stress">Stress</a></li>
+      <li><a href="index.html#trabalho">No Trabalho</a></li>
+      <li><a href="index.html#promocao">Promoção</a></li>
+      <li><a href="index.html#obesidade">Obesidade Infantil</a></li>
+      <li><a href="contraceptivos.html">Contraceptivos</a></li>
+    </ul>
+  </nav>
+  <div class="menu-toggle" id="menu-toggle">☰</div>
+</header>
+
+<section class="banner">
+  <h1>Métodos Contraceptivos</h1>
+  <p>Informações sobre implante contraceptivo e desogestrel</p>
+</section>
+
+<section id="implante-contraceptivo">
+  <h2>Implante Contraceptivo</h2>
+  <img src="sabia-que-existe-um-anticoncepcional-certo-para-o-seu-organismo-metodos-contraceptivos-umcenter.webp" alt="Implante Contraceptivo" style="width:100%; max-width:600px; margin-bottom:20px;">
+  <p>
+    O implante contraceptivo (nome comercial Implanon) é um método hormonal de longa duração que contém 68 mg do hormônio etonogestrel.
+    Consiste em uma pequena haste de plástico implantada diretamente na pele por meio de um procedimento simples e rápido.
+    Sua dosagem é suficiente para durar cerca de três anos.
+  </p>
+  <h3>Como Funciona</h3>
+  <p>
+    O implante age por meio da combinação de três efeitos principais:
+  </p>
+  <ul>
+    <li>Inibição da ovulação;
+    <li>Espessamento do muco cervical, dificultando a passagem dos espermatozoides;
+    <li>Alteração do revestimento interno do útero, tornando mais difícil a implantação de um possível óvulo fecundado.
+  </ul>
+  <p>
+    Essas ações fazem o implante contraceptivo ser considerado um dos métodos mais eficazes atualmente, com uma taxa de eficácia superior a 99%.
+  </p>
+  <h3>Aplicação e Manutenção</h3>
+  <p>
+    A recomendação é que o implante seja inserido por profissionais de saúde qualificados.
+    O procedimento é simples, rápido e realizado com anestesia local.
+    Durante os três anos de uso, não é necessário realizar manutenção; o efeito contraceptivo é contínuo e não depende de qualquer iniciativa do usuário.
+    Vale destacar que o implante não protege contra infecções sexualmente transmissíveis (ISTs).
+  </p>
+  <h3>Efeitos Colaterais Comuns</h3>
+  <ul>
+    <li>Irregularidade menstrual (fluxos prolongados, intensos ou ausentes);
+    <li>Dor de cabeça;
+    <li>Aumento de peso;
+    <li>Acne;
+    <li>Sensibilidade nas mamas;
+    <li>Alterações de humor ou sintomas depressivos.
+  </ul>
+  <h3>Contraindicações</h3>
+  <p>
+    O uso do implante é contraindicado em casos de:
+  </p>
+  <ul>
+    <li>Gravidez ou parto há menos de 21 dias;
+    <li>Sangramentos vaginais não diagnosticados;
+    <li>Doenças ou câncer no fígado;
+    <li>Histórico de câncer de mama ou de útero;
+    <li>Coágulos sanguíneos, AVC (derrame) ou infarto.
+  </ul>
+  <p>
+    Além disso, pessoas com diabetes, hipertensão, colesterol alto, doenças renais ou da vesícula, histórico de depressão ou alergia a anestésicos devem passar por avaliação médica criteriosa antes de optar pelo método.
+  </p>
+  <h3>Disponibilidade no SUS</h3>
+  <p>
+    Em julho de 2025, o Ministério da Saúde anunciou que o implante contraceptivo passará a ser disponibilizado no Sistema Único de Saúde (SUS).
+    Com isso, a população poderá acessar gratuitamente essa estratégia que, no setor privado, pode custar de R$ 2 mil a 4 mil.
+    A expectativa é oferecer cerca de 500 mil dispositivos só no segundo semestre de 2025, por meio dos atendimentos nas Unidades Básicas de Saúde (UBS).
+    Até o final de 2026, o objetivo é chegar à marca de 1,8 milhão de aplicações.
+  </p>
+</section>
+<section id="desogestrel">
+  <h2>Desogestrel: Diferenças e Benefícios</h2>
+  <img src="" alt="Desogestrel" style="width:100%; max-width:600px; margin-bottom:20px;">
+  <p>
+    O desogestrel é um anticoncepcional à base de progestagênio, também conhecido como "minipílula". Ele age bloqueando a ovulação e é indicado para mulheres que não podem ou preferem não usar estrogênio, como durante a amamentação.
+  </p>
+  <h3>Diferenças em relação a outros anticoncepcionais</h3>
+  <p>
+    Ao contrário dos contraceptivos orais combinados (COCs), que contêm estrogênio e progestagênio, o desogestrel contém apenas progestagênio. Isso pode ser vantajoso para mulheres que têm contraindicações ao estrogênio ou que estão amamentando, já que o estrogênio pode reduzir a produção de leite.
+  </p>
+  <h3>Como usar</h3>
+  <p>
+    O desogestrel deve ser tomado diariamente, no mesmo horário, sem pausas entre as cartelas. Se iniciado entre o primeiro e o quinto dia do ciclo menstrual, a proteção é imediata. Caso contrário, é necessário aguardar dois dias para que o efeito contraceptivo seja eficaz.
+  </p>
+  <h3>Efeitos colaterais comuns</h3>
+  <ul>
+    <li>Alterações menstruais (fluxos irregulares ou ausentes)</li>
+    <li>Acne</li>
+    <li>Alterações de humor</li>
+    <li>Ganho de peso</li>
+    <li>Alterações na libido</li>
+  </ul>
+  <p>
+    Em casos raros, podem ocorrer cistos ovarianos, que geralmente desaparecem sozinhos sem necessidade de tratamento.
+  </p>
+  <h3>Contraindicações</h3>
+  <p>
+    O desogestrel não é recomendado para mulheres com histórico de doenças cardiovasculares, cirrose, câncer de mama ou problemas renais. Além disso, certos medicamentos, como os utilizados no tratamento de tuberculose, epilepsia ou HIV, podem reduzir a eficácia do desogestrel.
+  </p>
+  <h3>Disponibilidade no SUS</h3>
+  <p>
+    Em 2025, o desogestrel foi incorporado ao Sistema Único de Saúde (SUS), permitindo que mais mulheres tenham acesso a esse método contraceptivo seguro e eficaz.
+  </p>
+</section>
+
+<section style="text-align:center; margin:40px 0;">
+  <a href="index.html" style="background:#27ae60; color:white; padding:15px 30px; border-radius:25px; text-decoration:none; font-size:1.2rem;">
+    &larr; Voltar para Qualidade de Vida
+  </a>
+</section>
+
+<footer>
+  <p>&copy; 2025 Qualidade de Vida | Inspirado em Saúde e Bem-Estar</p>
+</footer>
+
+<script>
+  const toggle = document.getElementById('menu-toggle');
+  const nav = document.getElementById('nav');
+  toggle.addEventListener('click', () => {
+    nav.classList.toggle('open');
+  });
+
+  // Barra de pesquisa: filtra seções pelo texto
+  const searchInput = document.getElementById('searchInput');
+  searchInput.addEventListener('input', function() {
+    const query = this.value.toLowerCase();
+    document.querySelectorAll('section').forEach(section => {
+      if (section.textContent.toLowerCase().includes(query) || !query) {
+        section.style.display = '';
+      } else {
+        section.style.display = 'none';
+      }
+    });
+  });
+</script>
+
+</body>
+</html>
